@@ -38,8 +38,9 @@ export const useMount = (callback: () => void) => {
 // log();
 // log();
 
+// <V>泛型占位符
 // useDebounce这个costomHook函数作用主要是把value转化成debounceValue;
-export const useDebounce = (value: any, delay?: number) => {
+export const useDebounce = <V>(value: V, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 
   useEffect(() => {

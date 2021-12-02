@@ -55,3 +55,22 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 
 // 什么时候用像cleanObject这样的普通函数，什么时候用useDebounce这样的costomHook
 // 关键在于在该函数内是否需要使用到react本身的hook，需要的话则用use开头的函数，即costomHook
+
+export const useArray = <T>(initialArray: T[]) => {
+  const [value, setValue] = useState(initialArray);
+  const clear = () => {
+    setValue([]);
+  };
+  const removeIndex = (index: number) => {
+    const copy = [...value];
+    copy.splice(index, 1);
+    setValue(copy);
+  };
+  return {
+    value,
+    setValue,
+    clear,
+    add: (item: T) => setValue([...value, item]),
+    removeIndex,
+  };
+};

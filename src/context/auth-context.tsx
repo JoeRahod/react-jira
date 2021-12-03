@@ -12,7 +12,7 @@ const AuthContext = React.createContext<
       user: User | null;
       register: (form: AuthForm) => Promise<void>;
       login: (form: AuthForm) => Promise<void>;
-      logout: (form: AuthForm) => Promise<void>;
+      logout: () => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (form: AuthForm) => auth.login(form).then(setUser); // 消参数 函数式编程point-free
   const register = (form: AuthForm) =>
     auth.register(form).then((user) => setUser(user));
-  const logout = (form: AuthForm) => auth.logout().then(() => setUser(null));
+  const logout = () => auth.logout().then(() => setUser(null));
 
   return (
     <AuthContext.Provider

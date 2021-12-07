@@ -1,9 +1,10 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { User } from "screens/project-list/search-panel";
 import * as auth from "auth-provider";
 import { http } from "utils/http";
 import { useMount } from "utils";
-
+import { useAsync } from "utils/use-async";
+import { FullPageError, FullPageLoading } from "components/lib";
 interface AuthForm {
   username: string;
   password: string;
@@ -32,7 +33,14 @@ const AuthContext = React.createContext<
 AuthContext.displayName = "AuthContext"; // 主要用在devtools里，项目中没啥用
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
 
   const login = (form: AuthForm) => auth.login(form).then(setUser); // 消参数 函数式编程point-free
   const register = (form: AuthForm) =>
@@ -40,8 +48,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => auth.logout().then(() => setUser(null));
 
   useMount(() => {
-    bootstrapUser().then(setUser);
+    run(bootstrapUser());
   });
+
+  if (isIdle || isLoading) {
+    return <FullPageLoading />;
+  }
+
+  if (error) {
+    return <FullPageError error={error} />;
+  }
 
   return (
     <AuthContext.Provider

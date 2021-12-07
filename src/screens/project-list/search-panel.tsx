@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { Input, Select } from "antd";
-
+import { Input, Select, Form } from "antd";
 export interface User {
   id: string;
   name: string;
@@ -26,10 +25,10 @@ export const SearchPanel = ({
   setSeachParam,
 }: SearchPanelProps) => {
   return (
-    <form action="">
-      <div>
-        {/* setSeachParam(Object.assign({}, searchParam, {name:evt.target.value})) */}
+    <Form layout={"inline"} style={{ marginBottom: "2rem" }}>
+      <Form.Item>
         <Input
+          placeholder={"项目名"}
           type="text"
           value={searchParam.name}
           onChange={(evt) =>
@@ -39,7 +38,8 @@ export const SearchPanel = ({
             })
           }
         />
-        {/* video1 at done*/}
+      </Form.Item>
+      <Form.Item>
         <Select
           value={searchParam.personId}
           onChange={(value) =>
@@ -56,7 +56,7 @@ export const SearchPanel = ({
             </Select.Option>
           ))}
         </Select>
-      </div>
-    </form>
+      </Form.Item>
+    </Form>
   );
 };

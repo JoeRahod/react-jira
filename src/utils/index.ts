@@ -76,3 +76,23 @@ export const useArray = <T>(initialArray: T[]) => {
     removeIndex,
   };
 };
+
+export const useDocumentTitle = (
+  title: string,
+  keepOnUnmount: boolean = true
+) => {
+  const oldTitle = document.title;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    // useEffect里return函数相当于组件销毁的时候的生命周期钩子
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle;
+      }
+    };
+  });
+};

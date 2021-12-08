@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 // 错误边界组件一定要class组件
 // 错误边界https://react.docschina.org/docs/error-boundaries.html

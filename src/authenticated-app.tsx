@@ -5,9 +5,11 @@ import styled from "@emotion/styled";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Dropdown, Menu, Button } from "antd";
+import { useDocumentTitle } from "utils";
 
 export const AuthenticatedApp = () => {
   const { user, logout } = useAuth();
+  useDocumentTitle("Jira-Task 项目列表", false);
   return (
     <Container>
       <Header between={true}>

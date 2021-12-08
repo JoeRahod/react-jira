@@ -3,15 +3,17 @@ import { useAuth } from "context/auth-context";
 import "./App.css";
 import { AuthenticatedApp } from "authenticated-app";
 import { UnauthenticatedApp } from "unauthenticated-app";
-// import {TsReactTest} from './try-use-array';
+import { ErrorBoundary } from "components/error-boundary";
+import { FullPageError } from "components/lib";
 
 function App() {
   const { user } = useAuth();
 
   return (
     <div className="App">
-      {/* <TsReactTest /> */}
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      <ErrorBoundary fallbackRender={FullPageError}>
+        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      </ErrorBoundary>
     </div>
   );
 }

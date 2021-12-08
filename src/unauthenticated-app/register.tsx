@@ -1,5 +1,4 @@
 import { useAuth } from "context/auth-context";
-import React from "react";
 import { Form, Input } from "antd";
 import { LongButton } from "unauthenticated-app";
 import { useAsync } from "utils/use-async";
@@ -9,7 +8,7 @@ export const RegisterScreen = ({
 }: {
   onError: (error: Error) => void;
 }) => {
-  const { register, user } = useAuth();
+  const { register } = useAuth();
   const { run, isLoading } = useAsync();
 
   const handleSubmit = ({

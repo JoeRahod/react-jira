@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import React from "react";
 import { Input, Select, Form } from "antd";
 export interface User {
   id: string;

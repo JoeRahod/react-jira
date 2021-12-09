@@ -1,4 +1,3 @@
-import React from "react";
 import { useAuth } from "context/auth-context";
 import { ProjectListScreen } from "screens/project-list";
 import styled from "@emotion/styled";
@@ -9,6 +8,7 @@ import { useDocumentTitle } from "utils";
 import { Routes, Route } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
+import { resetRoute } from "utils";
 
 export const AuthenticatedApp = () => {
   useDocumentTitle("Jira-Task 项目列表", false);
@@ -18,11 +18,8 @@ export const AuthenticatedApp = () => {
       <Main>
         <Router>
           <Routes>
-            <Route path={"projects"} element={<ProjectListScreen />}></Route>
-            <Route
-              path={"projects/:projectId/*"}
-              element={<ProjectScreen />}
-            ></Route>
+            <Route path={"projects"} element={<ProjectListScreen />} />
+            <Route path={"projects/:projectId/*"} element={<ProjectScreen />} />
           </Routes>
         </Router>
       </Main>
@@ -36,7 +33,9 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <SoftwareLogo width={"18rem"} color={"rgb(38, 132 255)"} />
+        <Button type={"link"} onClick={resetRoute}>
+          <SoftwareLogo width={"18rem"} color={"rgb(38, 132 255)"} />
+        </Button>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>

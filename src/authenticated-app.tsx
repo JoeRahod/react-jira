@@ -4,14 +4,12 @@ import styled from "@emotion/styled";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Dropdown, Menu, Button } from "antd";
-import { useDocumentTitle } from "utils";
 import { Routes, Route } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
 
 export const AuthenticatedApp = () => {
-  useDocumentTitle("Jira-Task 项目列表", false);
   return (
     <Container>
       <PageHeader />

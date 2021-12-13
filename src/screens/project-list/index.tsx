@@ -1,17 +1,23 @@
 import { SearchPanel } from "./search-panel";
 import { List } from "screens/project-list/list";
 import { useState } from "react";
-import { useDebounce } from "utils";
+import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useUrlQueryParam } from "utils/url";
+import { useProjectSearchParam } from "./util";
 
 export const ProjectListScreen = () => {
-  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
-  const debounceParam = useDebounce(param, 1000);
-  const { isLoading, error, data: list } = useProjects(debounceParam);
+  useDocumentTitle("Jira-Task 项目列表", false);
+
+  const [param, setParam] = useProjectSearchParam();
+  const {
+    isLoading,
+    error,
+    data: list,
+  } = useProjects(useDebounce(param, 1000));
   const { data: users } = useUsers();
 
   console.log(useUrlQueryParam(["name"]));

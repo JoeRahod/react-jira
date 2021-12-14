@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { useEffect } from "react";
 
 export const AuthenticatedApp = () => {
   return (

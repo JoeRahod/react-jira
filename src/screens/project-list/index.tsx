@@ -1,9 +1,8 @@
 import { SearchPanel } from "./search-panel";
 import { List } from "screens/project-list/list";
-import { useState } from "react";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useUrlQueryParam } from "utils/url";
@@ -17,6 +16,7 @@ export const ProjectListScreen = () => {
     isLoading,
     error,
     data: list,
+    retry,
   } = useProjects(useDebounce(param, 1000));
   const { data: users } = useUsers();
 
@@ -25,6 +25,7 @@ export const ProjectListScreen = () => {
   return (
     <Container>
       <h1>项目列表</h1>
+      <Button onClick={retry}>Retry</Button>
       <SearchPanel
         users={users || []}
         searchParam={param}
@@ -33,7 +34,12 @@ export const ProjectListScreen = () => {
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
-      <List loading={isLoading} users={users || []} dataSource={list || []} />
+      <List
+        refresh={retry}
+        loading={isLoading}
+        users={users || []}
+        dataSource={list || []}
+      />
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMeountedRef } from "utils";
 
 interface State<D> {
   error: Error | null;
@@ -17,6 +18,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
     ...defaultInitialState,
     ...initialState,
   });
+
+  const mountedRef = useMeountedRef()
 
   // useState直接传入函数的含义是：惰性初始化；所以，要用useState保存函数，不能直接传入函数
   const [retry, setRetry] = useState(() => () => {});
@@ -51,7 +54,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
     setState({ ...state, stat: "loading" });
     return promise
       .then((data) => {
-        setData(data);
+        if(mountedRef.current) 
+          setData(data);
         return data;
       })
       .catch((error) => {

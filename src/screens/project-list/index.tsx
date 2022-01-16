@@ -25,7 +25,6 @@ export const ProjectListScreen = () => {
   return (
     <Container>
       <h1>项目列表</h1>
-      <Button onClick={retry}>Retry</Button>
       <SearchPanel
         users={users || []}
         searchParam={param}

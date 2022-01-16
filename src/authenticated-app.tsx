@@ -32,7 +32,7 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
+        <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132 255)"} />
         </Button>
         <h3>项目</h3>

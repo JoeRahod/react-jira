@@ -9,7 +9,7 @@ export const Row = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  justify-content: ${(props) => (props.between ? "space-between" : undefined)};
+  justify-content: ${(props) => (props.between ? "space-between" : 'center' )};
   margin-bottom: ${(props) => props.marginBottom + "rem"};
   > * {
     margin-top: 0 !important;

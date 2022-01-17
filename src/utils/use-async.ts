@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMeountedRef } from "utils";
 
 interface State<D> {
@@ -24,22 +24,22 @@ export const useAsync = <D>(initialState?: State<D>) => {
   // useState直接传入函数的含义是：惰性初始化；所以，要用useState保存函数，不能直接传入函数
   const [retry, setRetry] = useState(() => () => {});
 
-  const setData = (data: D) =>
+  const setData = useCallback((data: D) =>
     setState({
       data,
       stat: "success",
       error: null,
-    });
+    }), []);  
 
-  const setError = (error: Error) =>
+  const setError = useCallback((error: Error) =>
     setState({
       error,
       stat: "error",
       data: null,
-    });
+    }), []);
 
   // run 用来触发异步请求
-  const run = (
+  const run = useCallback((
     promise: Promise<D>,
     runConfig?: { retry: () => Promise<D> }
   ) => {
@@ -51,7 +51,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
         run(runConfig?.retry(), runConfig);
       }
     });
-    setState({ ...state, stat: "loading" });
+    setState(prevState => ({ ...prevState, stat: "loading" }));
     return promise
       .then((data) => {
         if(mountedRef.current) 
@@ -62,7 +62,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
         setError(error);
         return error;
       });
-  };
+  }, [mountedRef, setData, setError]);
 
   return {
     isIdle: state.stat === "idle",

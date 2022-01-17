@@ -2,13 +2,14 @@ import { SearchPanel } from "./search-panel";
 import { List } from "screens/project-list/list";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { Typography, Button } from "antd";
+import { Button, Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useUrlQueryParam } from "utils/url";
 import { useProjectSearchParam } from "./util";
+import { Row } from "components/lib";
 
-export const ProjectListScreen = () => {
+export const ProjectListScreen = (props: {setProjectModalOpen: (isOpen: boolean) => void}) => {
   useDocumentTitle("Jira-Task 项目列表", false);
 
   const [param, setParam] = useProjectSearchParam();
@@ -24,7 +25,10 @@ export const ProjectListScreen = () => {
 
   return (
     <Container>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+      </Row>
       <SearchPanel
         users={users || []}
         searchParam={param}
@@ -38,6 +42,7 @@ export const ProjectListScreen = () => {
         loading={isLoading}
         users={users || []}
         dataSource={list || []}
+        setProjectModalOpen={props.setProjectModalOpen}
       />
     </Container>
   );

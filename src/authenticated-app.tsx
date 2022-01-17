@@ -14,17 +14,17 @@ import { ProjectPopover } from "components/project-popover";
 
 export const AuthenticatedApp = () => {
   // 问题1：prop drilling，props传参的下钻，太多层的传参，setProjectModalOpen的定义和使用的组件离的太远。
-  // 问题2: 孙子调用爷爷，耦合在一起了。
+  // 问题2: 孙子调用爷爷，耦合在一起了。 https://zhuanlan.zhihu.com/p/60995312 控制反转
   // 解决方案1: 全局状态管理
-  // 解决方案2: composition 组合方式
+  // 解决方案2: component composition组件组合方式 React高级指引-Context
   const [orojectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
+      <PageHeader projectButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type="link">创建项目</ButtonNoPadding>} />
       <Main>
         <Router>
           <Routes>
-            <Route path={"projects"} element={<ProjectListScreen setProjectModalOpen={setProjectModalOpen}/>} />
+            <Route path={"projects"} element={<ProjectListScreen projectButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type="link">创建项目</ButtonNoPadding>}/>} />
             <Route path={"projects/:projectId/*"} element={<ProjectScreen />} />
           </Routes>
         </Router>
@@ -34,14 +34,14 @@ export const AuthenticatedApp = () => {
   );
 };
 
-const PageHeader = (props: {setProjectModalOpen: (isOpen: boolean) => void}) => {
+const PageHeader = (props: {projectButton: JSX.Element}) => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
         <ButtonNoPadding style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132 255)"} />
         </ButtonNoPadding>
-        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen}/>
+        <ProjectPopover {...props}/>
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

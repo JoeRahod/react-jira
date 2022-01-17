@@ -9,7 +9,7 @@ import { useUrlQueryParam } from "utils/url";
 import { useProjectSearchParam } from "./util";
 import { Row } from "components/lib";
 
-export const ProjectListScreen = (props: {setProjectModalOpen: (isOpen: boolean) => void}) => {
+export const ProjectListScreen = (props: {projectButton: JSX.Element}) => {
   useDocumentTitle("Jira-Task 项目列表", false);
 
   const [param, setParam] = useProjectSearchParam();
@@ -27,7 +27,7 @@ export const ProjectListScreen = (props: {setProjectModalOpen: (isOpen: boolean)
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+        {props.projectButton}
       </Row>
       <SearchPanel
         users={users || []}
@@ -42,7 +42,7 @@ export const ProjectListScreen = (props: {setProjectModalOpen: (isOpen: boolean)
         loading={isLoading}
         users={users || []}
         dataSource={list || []}
-        setProjectModalOpen={props.setProjectModalOpen}
+        projectButton={props.projectButton}
       />
     </Container>
   );

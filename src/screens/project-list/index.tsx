@@ -21,8 +21,6 @@ export const ProjectListScreen = (props: {projectButton: JSX.Element}) => {
   } = useProjects(useDebounce(param, 1000));
   const { data: users } = useUsers();
 
-  console.log(useUrlQueryParam(["name"]));
-
   return (
     <Container>
       <Row between={true}>

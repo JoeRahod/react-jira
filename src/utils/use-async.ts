@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { useMeountedRef } from "utils";
 
 interface State<D> {
@@ -13,30 +13,40 @@ const defaultInitialState: State<null> = {
   error: null,
 };
 
+// const defaultConfig = {
+//   throwOnError: false,
+// }
+
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMeountedRef()
+
+  return useCallback((...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0), [dispatch, mountedRef])  
+}
+
 export const useAsync = <D>(initialState?: State<D>) => {
-  const [state, setState] = useState<State<D>>({
+  const [state, dispatch] = useReducer((state:State<D>, action: Partial<State<D>>) => ({...state, ...action}), {
     ...defaultInitialState,
     ...initialState,
   });
 
-  const mountedRef = useMeountedRef()
+  const safeDispatch = useSafeDispatch(dispatch)
 
   // useState直接传入函数的含义是：惰性初始化；所以，要用useState保存函数，不能直接传入函数
   const [retry, setRetry] = useState(() => () => {});
 
   const setData = useCallback((data: D) =>
-    setState({
+    safeDispatch({
       data,
       stat: "success",
       error: null,
-    }), []);  
+    }), [safeDispatch]);  
 
   const setError = useCallback((error: Error) =>
-    setState({
+    safeDispatch({
       error,
       stat: "error",
       data: null,
-    }), []);
+    }), [safeDispatch]);
 
   // run 用来触发异步请求
   const run = useCallback((
@@ -51,18 +61,18 @@ export const useAsync = <D>(initialState?: State<D>) => {
         run(runConfig?.retry(), runConfig);
       }
     });
-    setState(prevState => ({ ...prevState, stat: "loading" }));
+    safeDispatch({stat: 'loading'});
     return promise
       .then((data) => {
-        if(mountedRef.current) 
-          setData(data);
+        setData(data);
         return data;
       })
       .catch((error) => {
         setError(error);
+        // if(config.throwOnError) return Promise.reject(error)
         return error;
       });
-  }, [mountedRef, setData, setError]);
+  }, [setData, setError, safeDispatch]);
 
   return {
     isIdle: state.stat === "idle",
